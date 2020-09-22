@@ -2,3 +2,7 @@
 import gym
 import gym_cassie
 env = gym.make('cassie-v0')
+
+while True:
+    env.step(1)
+
