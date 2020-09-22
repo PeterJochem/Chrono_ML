@@ -105,7 +105,7 @@ class NeuralNetwork:
         #saver = tf.train.Saver()
         
         # Hyper parameters 
-        self.epochs = 10
+        self.epochs = 50 # 120
         #self.batchSize = 
         #self.learningRate = 
         #
@@ -119,14 +119,15 @@ class NeuralNetwork:
 
         self.x = tf.placeholder(tf.float32, shape=(None, self.inputShape), name = 'x')
         self.y = tf.placeholder(tf.float32, shape=(None, self.outputShape), name = 'y')
-
-        self.W1 = tf.Variable(tf.random_normal([self.inputShape, 28], stddev = 0.03), name = 'W1')
+        
+        # (0, 0.1 and 120 epochs was best so far
+        self.W1 = tf.Variable(tf.random_normal([self.inputShape, 28], 0.0, 0.1), name = 'W1')
         self.b1 = tf.Variable(tf.zeros([28]), name = 'b1')
 
-        self.W2 = tf.Variable(tf.random_normal([28, 14], stddev = 0.03), name = 'W2')
+        self.W2 = tf.Variable(tf.random_normal([28, 14], 0.0, 0.1), name = 'W2')
         self.b2 = tf.Variable(tf.zeros([14]), name = 'b2')
 
-        self.W3 = tf.Variable(tf.random_normal([14, self.outputShape], stddev = 0.03), name = 'W3')
+        self.W3 = tf.Variable(tf.random_normal([14, self.outputShape], 0.0, 0.1), name = 'W3')
         self.b3 = tf.Variable(tf.zeros([self.outputShape]), name = 'b3')
 
         #self.W4 = tf.Variable(tf.random_normal([12, 5], stddev = 0.03), name = 'W4')
@@ -142,12 +143,12 @@ class NeuralNetwork:
 
         self.y_pred = tf.add(tf.matmul(self.hidden_out2, self.W3), self.b3)
 
-        self.loss = tf.nn.l2_loss(tf.subtract(self.y, self.y_pred)) #/ (len(myDataSet.allData))
-        #self.loss = tf.reduce_mean(tf.square(self.y_pred - self.y))
+        #self.loss = tf.nn.l2_loss(self.y - self.y_pred) # / (len(myDataSet.allData))
+        self.loss = tf.reduce_mean(tf.square(self.y - self.y_pred))
         
         # Derivatives of the graph
         self.d_loss_dx = tf.gradients(self.loss, self.x)[0]  
-        self.optimizer = tf.train.GradientDescentOptimizer(0.00000001)
+        self.optimizer = tf.train.AdamOptimizer(0.1)
         self.train_op = self.optimizer.minimize(self.loss)
 
 
