@@ -1,7 +1,7 @@
 """ Run this just to make sure gym has our environment installed """
 import gym
-import gym_cassie
-env = gym.make('cassie-v0')
+import gym_hopping_robot
+env = gym.make('hopping_robot-v0')
 
 i = 1
 while i in range(10):
