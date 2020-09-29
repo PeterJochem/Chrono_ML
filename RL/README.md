@@ -4,13 +4,12 @@ This implements everything needed for a few OpenAI gym environments. I created a
 
 
 # gym-cassie
-The Cassie robot. Has details about modifying the environment. Describe the reward function, and any timeouts etc. 
-
-# gym-hopping_robot
-The hopping robot. Has details about modifying the environment. Describe the reward function, and any timeouts etc.  
+The Cassie robot. Has details about modifying the environment. Describe the reward function, and any timeouts etc. <br />
 
 ![Cassie Robot Following a Random Policy](images/random_actions2.gif)
 
+# gym-hopping_robot
+The hopping robot. Has details about modifying the environment. Describe the reward function, and any timeouts etc.  
 
 # Instructions for Using My Environment 
 ```git clone <nameOfRepo>``` <br />
