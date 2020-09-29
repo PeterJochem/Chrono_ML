@@ -9,6 +9,8 @@ The Cassie robot. Has details about modifying the environment. Describe the rewa
 # gym-hopping_robot
 The hopping robot. Has details about modifying the environment. Describe the reward function, and any timeouts etc.  
 
+![Cassie Robot Following a Random Policy](images/random_actions2.gif)
+
 
 # Instructions for Using My Environment 
 ```git clone <nameOfRepo>``` <br />
