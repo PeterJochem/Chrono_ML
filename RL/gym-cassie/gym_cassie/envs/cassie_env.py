@@ -22,7 +22,6 @@ class CassieEnv(gym.Env):
         self.physicsClient = p.connect(p.GUI, options="--width=1920 --height=1080")
         p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0) # Removes the slider panel, looks very clean
 
-
         self.jointIds=[]
         self.paramIds=[]
 

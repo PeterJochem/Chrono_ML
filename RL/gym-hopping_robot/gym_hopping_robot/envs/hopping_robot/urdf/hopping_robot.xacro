@@ -4,20 +4,19 @@
      Date: 09/29/2020   -->
 <robot name="hopping_robot" xmlns:xacro="http://ros.org/wiki/xacro">
 	
+	<xacro:property name="torso_width" value="0.4" />
+        <xacro:property name="torso_height" value="0.4" />
+        <xacro:property name="torso_depth" value="0.4" />
+        <xacro:property name="torso_mass" value="1.0" />
+
 	<xacro:property name="leg_length" value="1.0" />
 	<xacro:property name="leg_radius" value="0.05"/>
 	<xacro:property name="leg_mass" value="1.0" />
-	
-	<xacro:property name="torso_width" value="0.35" />
-	<xacro:property name="torso_height" value="0.35" />
-        <xacro:property name="torso_depth" value="0.35" />
-        <xacro:property name="torso_mass" value="1.0" />
 
 	<xacro:property name="foot_width" value="0.25" />
-        <xacro:property name="foot_height" value="0.25" />
+        <xacro:property name="foot_height" value="0.60" />
         <xacro:property name="foot_depth" value="0.05" />
 	<xacro:property name="foot_mass" value="1.0" />
-
 		
 	<link name="torso">
 		<visual>
@@ -88,11 +87,11 @@
                         <material name="gray">
                                 <!-- color rgba="0 255 0 0.5" / -->
                         </material>
-			<origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+			<origin rpy="0 0 0" xyz="0.0 ${-foot_height/2} 0.0"/>
                 </visual>
 
                 <inertial>
-			<origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+			<origin rpy="0 0 0" xyz="0.0 ${-foot_height/2} 0.0"/>
                         <mass value = "1.0"/>
 
                         <!-- Fix the inertia tag-->
@@ -102,7 +101,7 @@
                 </inertial>
 
                 <collision>
-			<origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+			<origin rpy="0 0 0" xyz="0.0 ${-foot_height/2} 0.0"/>
                         <geometry>
                                 <box size="${foot_width} ${foot_height} ${foot_depth}" />
                         </geometry>
@@ -118,7 +117,7 @@
 	</joint>
 	
 	<joint name="leg_foot" type="revolute">
-		<origin xyz="0.0 ${-foot_width/2} ${-leg_length/2 - foot_depth/2}" rpy="0 0 0" />
+		<origin xyz="0.0 0.0 ${-leg_length/2 - foot_depth/2}" rpy="0 0 0" />
 	  	<axis xyz = "1 0 0" />
 	  	<parent link="leg" />
 		<child link="foot" />

@@ -225,8 +225,12 @@ class NeuralNetwork:
                     
             self.createPlots(F_Z, F_X) 
         
-    def createPlots(self, F_Z, F_X):
+    def createPlots(self, F_Z, F_X, useDefaultMap = False, customLimits = False):
+            
+        if (customLimits == True):
+            plt.rcParams['image.cmap'] = 'jet' # Similiar color scale as Juntao's data visualizations
         
+
         fig = plt.figure(figsize = (4, 4))
         columns = 2
         rows = 1
@@ -237,6 +241,10 @@ class NeuralNetwork:
         ax1.set_ylabel('β')
         ax1.set_xlabel('γ')
         ax1.title.set_text('α_Z')
+
+        if (customLimits == True):
+            plt.clim(-0.25, 0.25); # This conrols the scale of the color map - I set it to better match Junatos visualization
+        
         plt.colorbar()
 
         ax2 = fig.add_subplot(rows, columns, 2)
@@ -246,6 +254,10 @@ class NeuralNetwork:
         ax2.set_ylabel('β')
         ax2.set_xlabel('γ')
         ax2.title.set_text('α_X')
+        
+        if (customLimits == True):
+            plt.clim(-0.1, 0.1); # This conrols the scale of the color map - I set it to better match Junatos visualization
+
         plt.colorbar()
         plt.show()
 
@@ -253,14 +265,14 @@ class NeuralNetwork:
     def train_keras(self):
         
         #batch_size = 1000
-        self.network.fit([self.train_inputVectors], [self.train_labels], batch_size = len(self.train_inputVectors), epochs = 200)
+        self.network.fit([self.train_inputVectors], [self.train_labels], batch_size = len(self.train_inputVectors), epochs = 2)
             
         angle_resolution = 40
         angle_increment = 180.0 / angle_resolution # Remember we are using DEGREES
 
         F_X = np.zeros((angle_resolution, angle_resolution))
         F_Z = np.zeros((angle_resolution, angle_resolution))
-            
+                    
         for i in range(angle_resolution):
             for j in range(angle_resolution):
                 
@@ -272,7 +284,7 @@ class NeuralNetwork:
                 F_X[i][j] = prediction[0][0] 
                 F_Z[i][j] = prediction[0][1]
         
-        self.createPlots(F_Z, F_X)
+        self.createPlots(F_Z, F_X, True, True)
 
 
 # Create a datset object with all our data
@@ -280,8 +292,8 @@ myDataSet = dataSet("../dataSets/allData/compiledSet.csv")
 
 myNetwork = NeuralNetwork(myDataSet)
 
-myNetwork.defineGraph_tf()
-myNetwork.train_tf()
-#myNetwork.defineGraph_keras()
-#myNetwork.train_keras()
+#myNetwork.defineGraph_tf()
+#myNetwork.train_tf()
+myNetwork.defineGraph_keras()
+myNetwork.train_keras()
 
