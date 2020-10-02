@@ -1,5 +1,5 @@
 # This Week 
-I generated a dataset with Chrono and used Keras and Tensorflow to create a neural network.
+I used Keras and Tensorflow to train a neural network on the Chrono dataset.
 
 # Results 
 Below, on the right is the original data from the Chrono simulation. On the left is the learned neural network mapping.
