@@ -13,7 +13,7 @@
         <box size="0.4 0.4 0.4"/>
       </geometry>
       <material name="gray">
-        <!-- color rgba="255 0 0 0.75" / -->
+        <!-- color rgba="255 0 0 0.75" /-->
       </material>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     </visual>
@@ -30,25 +30,69 @@
       </geometry>
     </collision>
   </link>
-  <link name="leg">
+  <link name="link1">
     <visual>
       <geometry>
-        <cylinder length="1.0" radius="0.05"/>
+        <cylinder length="0.4" radius="0.05"/>
       </geometry>
       <material name="gray">
-        <!-- color rgba="0 0 255 0.4" / -->
+        <!-- color rgba="0 255 0 0.4" / -->
       </material>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </visual>
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="1.0"/>
-      <inertia ixx="0.0833333333333" iyy="0.0833333333333" izz="0.0833333333333"/>
+      <inertia ixx="0.0133333333333" iyy="0.0133333333333" izz="0.0133333333333"/>
     </inertial>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="1.0" radius="0.05"/>
+        <cylinder length="0.4" radius="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="link2">
+    <visual>
+      <geometry>
+        <cylinder length="0.4" radius="0.05"/>
+      </geometry>
+      <material name="gray">
+        <!-- color rgba="233 0 255 0.4" / -->
+      </material>
+      <origin rpy="0 0 0" xyz="0 0 -0.2"/>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 -0.2"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.0133333333333" iyy="0.0133333333333" izz="0.0133333333333"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.2"/>
+      <geometry>
+        <cylinder length="0.4" radius="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="link3">
+    <visual>
+      <geometry>
+        <cylinder length="0.4" radius="0.05"/>
+      </geometry>
+      <material name="gray">
+        <!-- color rgba="0 0 255 0.4"/ -->
+      </material>
+      <origin rpy="0 0 0" xyz="0 0 -0.2"/>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 -0.2"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.0133333333333" iyy="0.0133333333333" izz="0.0133333333333"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.2"/>
+      <geometry>
+        <cylinder length="0.4" radius="0.05"/>
       </geometry>
     </collision>
   </link>
@@ -77,14 +121,30 @@
   </link>
   <joint name="torso_leg" type="fixed">
     <parent link="torso"/>
-    <child link="leg"/>
-    <origin rpy="0 0 0" xyz="0.0 0.0 -0.7"/>
+    <child link="link1"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 -0.4"/>
     <axis xyz="0 0 0"/>
   </joint>
-  <joint name="leg_foot" type="revolute">
-    <origin rpy="0 0 0" xyz="0.0 0.0 -0.525"/>
+  <joint name="link1_link2" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0.0 -0.2"/>
     <axis xyz="1 0 0"/>
-    <parent link="leg"/>
+    <parent link="link1"/>
+    <child link="link2"/>
+    <!-- What to set these to? -->
+    <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/>
+  </joint>
+  <joint name="link2_link3" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0.0 -0.4"/>
+    <axis xyz="1 0 0"/>
+    <parent link="link2"/>
+    <child link="link3"/>
+    <!-- What to set these to? -->
+    <limit effort="10" lower="-1.57" upper="1.57" velocity="1.0"/>
+  </joint>
+  <joint name="leg_foot" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0.0 -0.425"/>
+    <axis xyz="1 0 0"/>
+    <parent link="link3"/>
     <child link="foot"/>
     <!-- What to set these to? -->
     <limit effort="10" lower="0.0" upper="1.57" velocity="1.0"/>
@@ -92,6 +152,20 @@
   <transmission name="leg_foot_trans" type="transmission_interface/SimpleTransmission">
     <joint name="leg_foot_trans"/>
     <actuator name="leg_foot_trans"/>
+    <!-- What to set these to? -->
+    <motorInertia>0.0000049</motorInertia>
+    <mechanicalReduction>50</mechanicalReduction>
+  </transmission>
+  <transmission name="link1_link2_trans" type="transmission_interface/SimpleTransmission">
+    <joint name="link1_link2_trans"/>
+    <actuator name="link1_link2_trans"/>
+    <!-- What to set these to? -->
+    <motorInertia>0.0000049</motorInertia>
+    <mechanicalReduction>50</mechanicalReduction>
+  </transmission>
+  <transmission name="link2_link3_trans" type="transmission_interface/SimpleTransmission">
+    <joint name="link2_link3_trans"/>
+    <actuator name="link2_link3_trans"/>
     <!-- What to set these to? -->
     <motorInertia>0.0000049</motorInertia>
     <mechanicalReduction>50</mechanicalReduction>

@@ -101,10 +101,10 @@ class HoppingRobotEnv(gym.Env):
     def controller(self, controlSignal):
 
         for i in range(len(self.paramIds)):
-            #nextJointId = self.paramIds[i]
-            #targetPos = p.readUserDebugParameter(nextJointId) # This reads from the sliders
-            targetPos = controlSignal[i]
-            p.setJointMotorControl2(self.hopper, self.jointIds[i], p.POSITION_CONTROL, targetPos, force = 10.0)
+            nextJointId = self.paramIds[i]
+            targetPos = p.readUserDebugParameter(nextJointId) # This reads from the sliders
+            #targetPos = controlSignal[i]
+            p.setJointMotorControl2(self.hopper, self.jointIds[i], p.POSITION_CONTROL, targetPos, force = 100.0)
     
     """Return the robot to its initial state"""
     def reset(self):
@@ -120,7 +120,7 @@ class HoppingRobotEnv(gym.Env):
 
     def step(self, action):
         
-         # Forward prop neural network to get GRF, use that to change the gravity
+        # Forward prop neural network to get GRF, use that to change the gravity
         # FIX ME
         p.getCameraImage(320, 200)
         p.setGravity(0, 0, p.readUserDebugParameter(self.gravId))
@@ -134,13 +134,34 @@ class HoppingRobotEnv(gym.Env):
                 # self.cubePos, self.cubeOrn = p.getBasePositionAndOrientation(self.hopper)
                 #time.sleep(0.001)
 
-
+    
         # observation = list of joint angles
 
-        return [], self.computeReward(), self.checkForEnd(), None
+        return self.computeObservation(), self.computeReward(), self.checkForEnd(), None
         # what is info?
         #return observation, reward, done, info
     
+    def getFootState(self):
+            
+        foot_joint_index = 1 # True for old robot but not the new one
+        foot_position, foot_velocity, foot_reaction_forces, appliedTorque = p.getJointStates(self.hopper, [foot_joint_index])[0]
+
+        #print(p.getJointStates(self.hopper, [foot_joint_index]))
+        
+        return foot_position, foot_velocity, foot_reaction_forces, appliedTorque
+        
+
+    def computeObservation(self):
+
+        self.robot_position, self.robot_orientation = p.getBasePositionAndOrientation(self.hopper)
+        roll, pitch, yaw = p.getEulerFromQuaternion(self.robot_orientation)
+        x, y, z = self.robot_position
+        
+        foot_angle, foot_velocity, foot_reaction_forces, appliedTorque = self.getFootState() 
+
+        # Should I give it the x, y, z too?
+        return [foot_angle, roll, pitch, yaw]  
+
 
     def checkForEnd(self):
 
@@ -162,7 +183,22 @@ class HoppingRobotEnv(gym.Env):
     """Read the state of the simulation to compute 
     and return the reward scalar for the agent"""
     def computeReward(self):
-        pass 
+        
+        self.robot_position, self.robot_orientation = p.getBasePositionAndOrientation(self.hopper)
+        x, y, z = self.robot_position
+
+        # Convert quaternion to Euler angles
+        roll, pitch, yaw = p.getEulerFromQuaternion(self.robot_orientation)
+
+        # Reward is inversely proportional to the rotation about the y axis (pitch), and x angle (roll)
+        # Reward is proportional to the forward motion in the +x direction
+        # FIX ME - which axis should we walk on?
+        if (roll == 0.0):
+            roll = 0.001
+        if (pitch == 0.0):
+            pitch = 0.001
+        return (-1.0/roll) + (-1.0/pitch) 
+
             
 
 

@@ -262,10 +262,10 @@ class NeuralNetwork:
         plt.show()
 
         
-    def train_keras(self):
+    def train_keras(self, epochs):
         
         #batch_size = 1000
-        self.network.fit([self.train_inputVectors], [self.train_labels], batch_size = len(self.train_inputVectors), epochs = 2)
+        self.network.fit([self.train_inputVectors], [self.train_labels], batch_size = len(self.train_inputVectors), epochs = epochs)
             
         angle_resolution = 40
         angle_increment = 180.0 / angle_resolution # Remember we are using DEGREES
@@ -295,5 +295,5 @@ myNetwork = NeuralNetwork(myDataSet)
 #myNetwork.defineGraph_tf()
 #myNetwork.train_tf()
 myNetwork.defineGraph_keras()
-myNetwork.train_keras()
+myNetwork.train_keras(300)
 

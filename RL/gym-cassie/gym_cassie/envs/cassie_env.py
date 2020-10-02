@@ -158,6 +158,10 @@ class CassieEnv(gym.Env):
     
         # Reward is inversely proportional to the rotation about the y axis (pitch), and x angle (roll)
         # Reward is proportional to the forward motion in the +x direction 
+        if (roll == 0.0):
+            roll = 0.001
+        if (pitch == 0.0):
+            pitch = 0.001
         return (-1.0/roll) + (-1.0/pitch) + (x * 10.0)
 
 
