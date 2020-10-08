@@ -68,14 +68,12 @@ class dataSet:
 
     """"""
     def displayData(self, numDepthGroups = 1):
-        angle_resolution = 8
+        angle_resolution = 6
         angle_increment = 180.0 / angle_resolution # Remember we are using DEGREES
         
 
         for outerLoop in range(numDepthGroups):
             # Create fixed size 2d arrays
-            #F_X = [[0]*angle_resolution for i in range(angle_resolution)]
-            #F_Z = [[0]*angle_resolution for i in range(angle_resolution)]
             F_X = [[0 for i in range(angle_resolution)] for j in range(angle_resolution)]
             F_Z = [[0 for i in range(angle_resolution)] for j in range(angle_resolution)]
 
@@ -86,7 +84,10 @@ class dataSet:
 
             lowerIndex = int(len(self.allTrainingInstances)/float(numDepthGroups) * outerLoop)
             upperIndex = int(len(self.allTrainingInstances)/float(numDepthGroups) * (outerLoop + 1) - 2)
-             
+                
+            minDepth = self.allData[lowerIndex][2]
+            maxDepth = self.allData[upperIndex][2]
+
             nextBatch = self.allTrainingInstances[lowerIndex:upperIndex]
             
             print("The length of the next batch is " + str(len(nextBatch)))
@@ -113,10 +114,10 @@ class dataSet:
                             F_X[j][i].append(nextBatch[k].label[0]) 
                             F_Z[j][i].append(nextBatch[k].label[1])
 
-            self.createPlots(F_Z, F_X, True, True)
+            self.createPlots(F_Z, F_X, minDepth, maxDepth, True, True)
     
 
-    def createPlots(self, F_Z, F_X, useDefaultMap = False, customLimits = False):
+    def createPlots(self, F_Z, F_X, minDepth, maxDepth, useDefaultMap = False, customLimits = False):
 
         if (customLimits == True):
             plt.rcParams['image.cmap'] = 'jet' # Similiar color scale as Juntao's data visualizations
@@ -131,20 +132,23 @@ class dataSet:
     
                 if (len(F_X[i][j]) <= 0):
                     print("No data in group")
-                    F_X[i][j] = 1.0 # FIX ME!!
+                    F_X[i][j] = 0.0 # FIX ME!!
                 else:
                     F_X[i][j] = float(F_X_sum)/len(F_X[i][j])
                 
                 if (len(F_Z[i][j]) <= 0):
-                    F_Z[i][j] = 1.0 # FIX ME!!!!
+                    F_Z[i][j] = 0.0 # FIX ME!!!!
                 else:
                     F_Z[i][j] = float(F_Z_sum)/len(F_Z[i][j])
     
 
-
         fig = plt.figure(figsize = (4, 4))
         columns = 2
         rows = 1
+        
+        title = str("GRF at depths between " + str(minDepth) + " cm and " + str(maxDepth) + " cm")
+        plt.title(title)
+        
         ax1 = fig.add_subplot(rows, columns, 1)
         ax1.set_yticklabels([])
         ax1.set_xticklabels([])

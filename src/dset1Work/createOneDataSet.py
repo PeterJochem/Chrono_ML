@@ -1,6 +1,5 @@
 """ Describe this file """
 
-
 def addFile(fileName, outputFile): 
     newFile = open(fileName, "r")
 

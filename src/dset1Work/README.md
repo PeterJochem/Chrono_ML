@@ -8,5 +8,24 @@ This is a Python script for reading in the dataset, creating a neural network, a
 This is a really short Python script which takes in a list of csv files created from Juntao's Kronos simulations and creates one really large dataset of the same format. To edit the list of files to add and where they are located, you only need to change a line or two of the 20 or so lines of code.  
 
 # visualize.py
-This 
+This segments the data into groups by depth and displays the raw data. This allows us to view how the GRF function changes as the foot moves further into the granular material.
+
+
+## GRF At Diffrent Depths 
+I segmented the data into quantiles by depth and for each group, plotted the simulated GRF data. This allows us to visualize how the GRF function changes as the foot traverses through the granular material. 
+
+![Quantile 1](media/q1.png) 
+
+
+![Quantile 2](media/q2.png)
+
+
+![Quantile 3](media/q3.png)
+
+
+![Quantile 4](media/q4.png)
+
+
+![Quantile 5](media/q5.png)
+
 
