@@ -18,33 +18,32 @@ class trainInstance:
     def __init__(self, inputVector, label):
 
         self.inputVector = inputVector # [gamma, beta, velocity_x, velocity_y, velocity_z]
-        self.label = label # [x-stress, y-stress]
+        self.label = label # [x-stress/depth, y-stress/depth]
 
 """Set of data and methods for creating a dataset which can be processed by Tensorflow or Keras"""
 class dataSet:
     
     def __init__(self, dataFilePath):
         
-        dataFile = open(stressDataFilePath, "r")
+        dataFile = open(dataFilePath, "r")
         self.allData = []
         
         self.minDepth = 1000000 
         self.maxDepth = -1000000
 
-        for stress, velocity in zip(stressDataFile, velocityDataFile):
+        for dataItem in zip(dataFile):
              
-            nextStress = stress.split(",") # [gamma, beta, depth, x-stress, y-stress] - the csv file format
-            nextVelocity = velocity.split(",") # [gamma, beta, depth, velocity_x, velocity_y, velocity_z] - the csv file format
+            x = dataItem[0].split(",") # [Gamma, Beta, Depth, Position_x, Position_z, Velocity x, Velocity y, Velocity Z, GRF X, GRF Y, GRF Z] - the csv file format
 
-            gamma = float(nextStress[0]) / 3.14 # The angles are in radians
-            beta = float(nextStress[1]) / 3.14
-            depth = float(nextStress[2]) # This is in cm - Chen Li uses cm^3
-            x_stress = float(nextStress[3]) #/ 100**2
-            z_stress = float(nextStress[4]) #/ 100**2
+            gamma = float(x[0]) / 3.14 # The angles are in radians
+            beta = float(x[1]) / 3.14
+            depth = float(x[2]) # This is in cm - Chen Li uses cm^3
+            x_stress = float(x[8]) #/ 100**2
+            z_stress = float(x[10]) #/ 100**2
             
-            velocity_x = float(nextVelocity[3]) 
-            velocity_y = float(nextVelocity[4])
-            velocity_z = float(nextVelocity[5])
+            velocity_x = float(x[3]) 
+            velocity_y = float(x[4])
+            velocity_z = float(x[5])
 
             newTrainInstance = trainInstance([gamma, beta, velocity_x, velocity_y, velocity_z], [(x_stress/depth), (z_stress/depth)])
             self.allData.append(newTrainInstance)
@@ -281,7 +280,8 @@ class NeuralNetwork:
 
 # Create a datset object with all our data
 
-dataFile = "../../dataSets/dset3/allData/compiledSet.csv"
+#dataFile = "../../dataSets/dset3/allData/compiledSet.csv"
+dataFile = "../../dataSets/dset3/dset.csv"
 myDataSet = dataSet(dataFile)
 
 myNetwork = NeuralNetwork(myDataSet)
