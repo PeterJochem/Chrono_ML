@@ -1,7 +1,5 @@
 # This Week
-Last Friday, Matt and I talked about what the next steps are for the project. We are interested in seeing if a reinforcement learning algorithm could learn a control policy for walking on deformable surfaces. We decided to implement an OpenAI gym environment for the Cassie robot as well as create a URDF and gym for a hopper robot similiar to Dan's robot.
-
-<br />
+Last Friday, Matt and I talked about what the next steps are for the project. We are interested in seeing if a reinforcement learning algorithm could learn a control policy for walking on deformable surfaces. We decided to implement an OpenAI gym environment for the Cassie robot as well as create a URDF and gym for a hopper robot similiar to Dan's robot. <br />
 
 # Hopper Robot Gym and URDF
 Dan and I also talked about how we could avoid having the ML algorithm do direct torque control of the joints. Dan's open-loop optimal controller is a wrench controller. This means that there is some lower level controller which must convert the optimal wrench down to a set of joint torques to apply. In that same way, it makes sense to have the reinforcement agent learn what wrench to apply rather than what torques to apply. We already have an analytical function that maps a desired end effector wrench of an open chain to the set of joint torques to apply. We could use the functions of the Modern Robotics library to take desired wrenches and map them to joint torques. This would significantly reduce the time needed to train the agent because it would not need to learn a representation of the underlying dynamics captured by the Newton-Euler equations. <br />
