@@ -1,8 +1,6 @@
 # Description
 This implements everything needed for a few OpenAI gym environments. I created a gym environment for Dan's hopping robot, Agility Robotic's Cassie, and Boston Dynamic's Spot Mini. Look at Maurice's directory for the specefics of his Spot Mini.
 
-
-
 # gym-cassie
 OpenAI gym environment for Agility Robotic's Cassie robot. The gym-cassie directory has details about modifying the environment. Describe the reward function, and any timeouts etc. <br />
 
